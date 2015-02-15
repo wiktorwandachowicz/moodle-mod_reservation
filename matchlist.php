@@ -58,13 +58,19 @@
         }
     }
 
-   echo '<div style="position: relative; float:right; text-align: right;"><a href="javascript:void(0)" onclick="document.getElementById(\'matchvalue_list\').style.display=\'none\';">'.get_string('close', 'reservation').'&#9746;</a></div>'."\n";
+    header('Content-type: text/html; charset=utf-8');
+    echo '<div style="position: relative; float:right; text-align: right;"><a href="javascript:void(0)" onclick="document.getElementById(\'matchvalue_list\').style.display=\'none\';">'
+        .get_string('close', 'reservation').'&#9746;</a></div>'."\n";
+
     // Generate inner div code
     if (!empty($values)) {
         echo '<strong>'.get_string('selectvalue', 'reservation').'</strong><br />'."\n";
         foreach ($values as $value) {
             if (!empty($value->$fieldname)) {
-                echo '<a href="javascript:void(0)" onclick="document.getElementById(\''.$matchvalue.'\').value=\''.addslashes(htmlentities($value->$fieldname)).'\'; document.getElementById(\'matchvalue_list\').style.display=\'none\';">'.$value->$fieldname.'</a><br />'."\n";
+                echo '<a href="javascript:void(0)" onclick="document.getElementById(\''.$matchvalue.'\').value=\''
+                    //.addslashes(htmlentities($value->$fieldname))
+                    .addslashes(htmlspecialchars($value->$fieldname))
+                    .'\'; document.getElementById(\'matchvalue_list\').style.display=\'none\';">'.$value->$fieldname.'</a><br />'."\n";
             }
         }
     } else {
