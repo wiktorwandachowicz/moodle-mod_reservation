@@ -129,5 +129,6 @@
     z-index: 99999;
     background-color:white;
     border: thin solid black;
+    overflow-y: auto;
 }
 
