@@ -689,6 +689,10 @@ function reservation_postprocess($reservation) {
         $reservation->mailed = 1;
     }
 
+    if (!isset($reservation->autograding)) {
+        $reservation->autograding = 0;
+    }
+
     return $reservation;
 }
 

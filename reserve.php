@@ -112,6 +112,10 @@
                             $request->reservation = $reservation->id;
                             $request->timecreated = time();
                             if (isset($request->userid) && !empty($request->userid)) {
+                                if (isset($reservation->autograding) && ($reservation->autograding > 0)) {
+                                    $request->grade = $reservation->autogradeval;
+                                    $request->timegraded = $now;
+                                }
                                 if ($requestid = $DB->insert_record('reservation_request', $request)) {
                                     $usernote = new stdClass();
                                     if (($reservation->note == 1) && (!empty($note))) {
@@ -126,6 +130,11 @@
                                     $completion=new completion_info($course);
                                     if ($completion->is_enabled($cm) && $reservation->completionreserved) {
                                         $completion->update_state($cm,COMPLETION_COMPLETE);
+                                    }
+
+                                    if (isset($reservation->autograding) && ($reservation->autograding > 0)) {
+                                        // Automatically save grade in gradebook.
+                                        reservation_update_grades($reservation, $request->userid);
                                     }
 
                                     redirect ('view.php?id='.$cm->id, get_string('reserved', 'reservation'), 2);
@@ -146,6 +155,9 @@
         } elseif (isset($cancel)) {
             if ($request = $DB->get_record('reservation_request', array('userid' => $USER->id, 'reservation' => $reservation->id, 'timecancelled' => '0'))) {
                 $DB->set_field('reservation_request', 'timecancelled', time(), array('id' => $request->id));
+                if (isset($reservation->autograding) && ($reservation->autograding > 0)) {
+                    $DB->set_field('reservation_request', 'grade', -1, array('id' => $request->id));
+                }
 
                 \mod_reservation\event\request_cancelled::create_from_request($reservation, $context, $request)->trigger();
 
@@ -153,6 +165,11 @@
                 $completion=new completion_info($course);
                 if ($completion->is_enabled($cm) && $reservation->completionreserved) {
                     $completion->update_state($cm,COMPLETION_INCOMPLETE);
+                }
+
+                if (isset($reservation->autograding) && ($reservation->autograding > 0)) {
+                    // Automatically remove grade from gradebook.
+                    reservation_update_grades($reservation, $request->userid);
                 }
                 redirect ('view.php?id='.$cm->id, get_string('reservationcancelled', 'reservation'), 2);
             } else {

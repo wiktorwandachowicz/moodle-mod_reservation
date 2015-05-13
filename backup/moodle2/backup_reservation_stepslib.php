@@ -26,7 +26,8 @@ class backup_reservation_activity_structure_step extends backup_activity_structu
             'location', 'timestart', 'timeend', 'maxgrade',
             'timeopen', 'timeclose', 'note', 'maxrequest',
             'overbook', 'showrequest', 'parent', 'mailed',
-            'completionreserved', 'timemodified'));
+            'completionreserved', 'timemodified',
+            'autograding', 'autogradeval'));
 
         $limits = new backup_nested_element('limits');
 

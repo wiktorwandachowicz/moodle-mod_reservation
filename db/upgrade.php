@@ -241,6 +241,7 @@ function xmldb_reservation_upgrade($oldversion=0) {
 
         upgrade_mod_savepoint(true, 2015031101, 'reservation');
     }
+
     if ($oldversion < 2015111600) {
         upgrade_mod_savepoint(true, 2015111600, 'reservation');
     }
@@ -257,6 +258,29 @@ function xmldb_reservation_upgrade($oldversion=0) {
     }
     if ($oldversion < 2016071100) {
         upgrade_mod_savepoint(true, 2016071100, 'reservation');
+    }
+
+    if ($oldversion < 2016102100) {
+        $table = new xmldb_table('reservation');
+
+        // Define field autograding to be added to reservation.
+        $field = new xmldb_field('autograding', XMLDB_TYPE_INTEGER, '1', XMLDB_UNSIGNED, XMLDB_NOTNULL, null, '0', 'timemodified');
+
+        // Conditionally launch add field autograding.
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+
+        // Define field autogradeval to be added to reservation.
+        $field = new xmldb_field('autogradeval', XMLDB_TYPE_INTEGER, '10', XMLDB_UNSIGNED, XMLDB_NOTNULL, null, '10', 'autograding');
+
+        // Conditionally launch add field autogradeval.
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+
+        // Reservation savepoint reached.
+        upgrade_mod_savepoint(true, 2016102100, 'reservation');
     }
 }
 
