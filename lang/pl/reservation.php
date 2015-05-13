@@ -49,7 +49,7 @@ $string['timeend'] = 'Data zakończenia';
 $string['save'] = 'Zapisz ocenę';
 $string['justbooked'] = 'Masz już rezerwację jako: {$a}';
 $string['alreadybooked'] = 'Masz już rezerwację';
-$string['yourgrade'] = 'Twoja ocena tej rezerwacji: {$a->grade}/${a->maxgrade}';
+$string['yourgrade'] = 'Twoja ocena tej rezerwacji: {$a->grade}/{$a->maxgrade}';
 $string['yourscale'] = 'Twoja ocena tej rezerwacji: {$a}';
 $string['by'] = 'przez';
 $string['showrequest'] = 'Użytkownicy mogą przeglądać listę zgłoszeń';
@@ -215,4 +215,8 @@ $string['eventrequestcancelled'] = 'Zgłoszenie rezerwacji anulowane';
 $string['eventrequestdeleted'] = 'Zgłoszenie rezerwacji usunięte';
 $string['modulename_help'] = '<p>Głównym celem tej aktywności jest rezerwowanie terminów zajęć laboratoryjnych i egzaminów, ale można jej używać także do innych rezerwacji.</p><p>Nauczyciel może określić liczbę miejsc dostępnych dla zdarzenia, daty zdarzenia, oraz daty otwarcia i zamknięcia rezerwacji.<br />Rezerwacja może mieć ocenę punktową lub skalę.<br />Studenci mogą zarezerwować i anulować rezerwację miejsca, oraz dodać uwagę przy swoim zgłoszeniu rezerwacji.</p><p>Po rozpoczęciu zdarzenia nauczyciel może oceniać każde zgłoszenie rezerwacji. Studenci będą powiadomieni pocztą.</p><p>Lista rezerwacji może być pobrana w różnych formatach.</p>';
 $string['completionreserved'] = 'Student musi dokonać rezerwacji, aby ukończyć tę aktywność.';
+$string['autograding'] = 'Automatyczne ocenianie zgłoszeń';
+$string['autograding_help'] = '<p>Automatyczne wstawianie oceny po wysłaniu lub anulowaniu zgłoszenia rezerwacji. Przydatne do tworzenia ograniczeń dostępu, które bazują na ocenie z dziennika ocen.</p><p>Wymaga włączenia zaawansowanej funkcji "enableavailability" (dostęp warunkowy).</p>';
+$string['autogradeval'] = 'Wartość automatycznej oceny';
+$string['autogradeval_help'] = 'Wartość wstawianej oceny jeśli automatyczne ocenianie zgłoszeń jest włączone.';
 ?>

@@ -166,6 +166,14 @@ class mod_reservation_mod_form extends moodleform_mod {
         $mform->addElement('modgrade','maxgrade', get_string('grade'));
         $mform->setDefault('maxgrade', 0);
 
+        $mform->addElement('checkbox', 'autograding', get_string('autograding', 'reservation'));
+        $mform->addHelpButton('autograding', 'autograding', 'reservation');
+
+        $mform->addElement('text', 'autogradeval', get_string('autogradeval', 'reservation'));
+        $mform->setType('autogradeval', PARAM_INT);
+        $mform->disabledIf('autogradeval', 'autograding', 'notchecked');
+        $mform->addHelpButton('autogradeval', 'autogradeval', 'reservation');
+
 //-------------------------------------------------------------------------------
 // Reservation Settings
         $mform->addElement('header', 'reservationsettings', get_string('reservationsettings', 'reservation'));

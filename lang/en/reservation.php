@@ -49,7 +49,7 @@ $string['timeend'] = 'End date';
 $string['save'] = 'Save grade';
 $string['justbooked'] = 'You are booked as: {$a}';
 $string['alreadybooked'] = 'You are already booked';
-$string['yourgrade'] = 'Your grade about this reservation is: {$a->grade}/${a->maxgrade}';
+$string['yourgrade'] = 'Your grade about this reservation is: {$a->grade}/{$a->maxgrade}';
 $string['yourscale'] = 'Your grade about this reservation is: {$a}';
 $string['by'] = 'by';
 $string['showrequest'] = 'Users can view requests list';
@@ -215,4 +215,8 @@ $string['eventrequestcancelled'] = 'Reservation request cancelled';
 $string['eventrequestdeleted'] = 'Reservation request deleted';
 $string['modulename_help'] = '<p>The main aim of this activity is schedule laboratory sessions and exams but you can schedule everything you want.</p><p>Teacher can define the number of seats available for the event, event date, reservation opening and closing date.<br />A reservation may have a grade or a scale.<br />Students can book and unbook a seat and add a note about this reservation.</p><p>After the event starts the teacher can grade the event. Students will notified by mail.</p><p>Reservation list may be downloaded in various formats.</p>';
 $string['completionreserved'] = 'Student must reserve to complete this activity';
+$string['autograding'] = 'Automatic request grading';
+$string['autograding_help'] = '<p>Automatic recording of grade after submitting or cancelling reservation request. Useful for creating conditional access restrictions, which are based on grade from gradebook.</p><p>Requires advanced feature "enableavailability" (conditional access) to be turned on.</p>';
+$string['autogradeval'] = 'Automatic grade value';
+$string['autogradeval_help'] = 'Grade recorded automatically when automatic grading is enabled.';
 ?>
