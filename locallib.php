@@ -262,6 +262,80 @@ function reservation_get_requests($reservation, $full=false, $fields=null, $grou
     return $requests;
 }
 
+/**
+ * Cancel reservation request, update completion info and grades in gradebook
+ *
+ * @param $reservation object  reservation record object
+ * @param $userid      int     ID of user
+ * @param $course      object  course record object
+ * @param $cm          object  course module record object
+ * @return bool   true if request cancelled, false if error
+ */
+function reservation_cancel_request($reservation, $userid, $course, $cm) {
+    global $DB;
+    if ($request = $DB->get_record('reservation_request', array('userid' => $userid, 'reservation' => $reservation->id, 'timecancelled' => '0'))) {
+
+        $DB->set_field('reservation_request', 'timecancelled', time(), array('id' => $request->id));
+        if (isset($reservation->autograding) && ($reservation->autograding > 0)) {
+            $DB->set_field('reservation_request', 'grade', -1, array('id' => $request->id));
+        }
+
+        $context = context_module::instance($cm->id);
+        \mod_reservation\event\request_cancelled::create_from_request($reservation, $context, $request)->trigger();
+
+        // Update completion state
+        $completion = new completion_info($course);
+        if ($completion->is_enabled($cm) && $reservation->completionreserved) {
+            $completion->update_state($cm,COMPLETION_INCOMPLETE);
+        }
+
+        if (isset($reservation->autograding) && ($reservation->autograding > 0)) {
+            // Automatically remove grade from gradebook.
+            reservation_update_grades($reservation, $request->userid);
+        }
+        return true;
+    }
+    return false;
+}
+
+function reservation_cancel_user_requests($userid, $courseid, $now = 0) {
+    global $DB;
+    $course = $DB->get_record('course', array('id' => $courseid));
+
+    if ($now == 0)
+        $now = time();
+
+    $reservations = reservation_get_reservations_by_course($courseid);
+    foreach ($reservations as $reservation) {
+        // Check only open reservations.
+        if ($now < $reservation->timeclose) {
+            if ($cm = get_coursemodule_from_instance('reservation', $reservation->id, $courseid)) {
+                // Cancel reservation request of a user.
+                reservation_cancel_request($reservation, $userid, $course, $cm);
+            }
+        }
+    }
+}
+
+function reservation_restore_user_requests_grades($userid, $courseid, $now = 0) {
+    global $DB;
+    $course = $DB->get_record('course', array('id' => $courseid));
+
+    if ($now == 0)
+        $now = time();
+
+    $reservations = reservation_get_reservations_by_course($courseid);
+    foreach ($reservations as $reservation) {
+        // Check only closed reservations.
+        if ($now > $reservation->timeclose) {
+            if ($cm = get_coursemodule_from_instance('reservation', $reservation->id, $courseid)) {
+                // Restore grades for reservation request of a user.
+                reservation_update_grades($reservation, $userid);
+            }
+        }
+    }
+}
+
 // Sorts an array (you know the kind) by key
 // and by the comparison operator you prefer.
 // Note that instead of most important criteron first, it's
