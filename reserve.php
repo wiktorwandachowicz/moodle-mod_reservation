@@ -151,6 +151,8 @@
                 $notice = 'reservationdenied';
             }
         } elseif (isset($cancel)) {
+            if (reservation_cancel_request($reservation, $USER->id, $course, $cm)) {
+/*
             if ($request = $DB->get_record('reservation_request', array('userid' => $USER->id, 'reservation' => $reservation->id, 'timecancelled' => '0'))) {
                 $DB->set_field('reservation_request', 'timecancelled', time(), array('id' => $request->id));
                 if (isset($reservation->autograding) && ($reservation->autograding > 0)) {
@@ -169,6 +171,7 @@
                     // Automatically remove grade from gradebook.
                     reservation_update_grades($reservation, $request->userid);
                 }
+*/
                 redirect ('view.php?id='.$cm->id, get_string('reservationcancelled', 'reservation'), 2);
             } else {
                 error('Bad script calling');
