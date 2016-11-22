@@ -68,9 +68,9 @@
         foreach ($values as $value) {
             if (!empty($value->$fieldname)) {
                 echo '<a href="javascript:void(0)" onclick="document.getElementById(\''.$matchvalue.'\').value=\''
-                    //.addslashes(htmlentities($value->$fieldname))
-                    .addslashes(htmlspecialchars($value->$fieldname))
-                    .'\'; document.getElementById(\'matchvalue_list\').style.display=\'none\';">'.$value->$fieldname.'</a><br />'."\n";
+                    .addslashes_js(htmlspecialchars($value->$fieldname))
+                    .'\'; document.getElementById(\'matchvalue_list\').style.display=\'none\';">'
+                    .s($value->$fieldname).'</a><br />'."\n";
             }
         }
     } else {
